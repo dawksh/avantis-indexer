@@ -1,7 +1,6 @@
 import {
     createPublicClient,
     webSocket,
-    type Block,
     type Transaction,
 } from "viem";
 import { base } from "viem/chains";
@@ -9,6 +8,8 @@ import { base } from "viem/chains";
 import { config } from "dotenv";
 import { decodeTransaction } from "./lib/decode";
 import logger from "./lib/logger";
+import './lib/telegram'
+
 
 config();
 

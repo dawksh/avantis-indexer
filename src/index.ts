@@ -25,6 +25,7 @@ const processBlock = async (block: any) => {
     for (const trade of trades) {
         switch (trade.action) {
             case "open":
+                logger.info(`Amount: ${trade.amount}`);
                 if (trade.amount! >= 50) {
                     broadcastMessage(
                         '📢 *New Trade Opened!*\n\n' +

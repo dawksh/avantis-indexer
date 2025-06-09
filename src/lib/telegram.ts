@@ -28,8 +28,14 @@ const registerUser = (id: UserId): void => {
 bot.onText(/\/start/, (msg: Message) => {
     const chatId = msg.chat.id;
     registerUser(chatId);
-    bot.sendMessage(chatId, 'You are now registered for updates!');
+    bot.sendMessage(chatId,
+        `👋 Hey there!  
+You're all set and registered to receive real-time trade alerts from Avantis.  
+Sit back and let the bot keep you updated on all the big moves with margin over $100! 🚀  
+If you have any questions, just type /help to get started.`
+    );
 });
+
 
 const chunk = (arr: number[], size: number): number[][] =>
     arr.length > size ? [arr.slice(0, size), ...chunk(arr.slice(size), size)] : [arr];

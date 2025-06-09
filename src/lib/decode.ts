@@ -23,7 +23,7 @@ export const decodeTransaction = (tx: Transaction) => {
             const tokenIndex = Number((decoded.args as unknown as Trade[])[0]?.pairIndex)
             const index = Number((decoded.args as unknown as Trade[])[0]?.index)
             return {
-                margin,
+                amount: margin,
                 leverage,
                 price,
                 buy,

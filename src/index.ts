@@ -25,7 +25,7 @@ const processBlock = async (block: any) => {
     for (const trade of trades) {
         switch (trade.action) {
             case "open":
-                logger.info(`Amount: ${trade.amount}`);
+                logger.info(`Trade Amount: ${trade.amount}`);
                 if (trade.amount! >= 50) {
                     broadcastMessage(
                         '📢 *New Trade Opened!*\n\n' +
@@ -34,7 +34,7 @@ const processBlock = async (block: any) => {
                         '🟢 *Direction*: ' + (trade.buy ? 'Long' : 'Short') + '\n' +
                         '💰 *Entry Price*: ' + trade.price + '\n' +
                         '⚖️ *Leverage*: ' + trade.leverage + 'x\n' +
-                        '📊 *Amount*: $' + trade.margin + '\n\n' +
+                        '📊 *Amount*: $' + trade.amount + '\n\n' +
                         '🎯 *Take Profit*: $' + trade.tp + '\n' +
                         '🛑 *Stop Loss*: $' + trade.sl + '\n\n' +
                         '🕒 *Time*: ' + trade.timestamp
@@ -42,12 +42,13 @@ const processBlock = async (block: any) => {
                 }
                 break;
             case "close":
-                const msg =
-                    '✅ *Position Closed*\n\n' +
-                    '👤 *Trader*: ' + trade.trader + '\n' +
-                    '💱 *Token*: ' + trade.token + '\n' +
-                    '💸 *Amount*: $' + trade.amount + '\n\n'
-                if (trade.amount! > 100) {
+                logger.info(`Trade Amount: ${trade.amount}`);
+                if (trade.amount! > 50) {
+                    const msg =
+                        '✅ *Position Closed*\n\n' +
+                        '👤 *Trader*: ' + trade.trader + '\n' +
+                        '💱 *Token*: ' + trade.token + '\n' +
+                        '💸 *Amount*: $' + trade.amount + '\n\n'
                     broadcastMessage(msg);
                 }
                 break;

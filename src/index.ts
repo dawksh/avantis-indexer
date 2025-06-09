@@ -21,7 +21,9 @@ const processBlock = async (block: any) => {
     const filters = (block.transactions as unknown as Transaction[]).filter(
         (tx) => tx.to === "0x44914408af82bc9983bbb330e3578e1105e11d4e"
     );
-    filters.forEach(tx => decodeTransaction(tx))
+    const decoded = filters.map(tx => decodeTransaction(tx))
+    const trades = decoded.filter(tx => tx !== null)
+    console.log(trades)
 };
 
 const unwatch = publicClient.watchBlocks({

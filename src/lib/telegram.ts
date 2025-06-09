@@ -31,15 +31,20 @@ bot.onText(/\/start/, (msg: Message) => {
     bot.sendMessage(chatId, 'You are now registered for updates!');
 });
 
-export const broadcastMessage = (message: string) => {
+const chunk = (arr: number[], size: number): number[][] =>
+    arr.length > size ? [arr.slice(0, size), ...chunk(arr.slice(size), size)] : [arr];
+
+export const broadcastMessage = async (message: string) => {
     const users = loadUsers();
+    const userChunks = chunk(users, 25);
 
-    users.forEach((id) => {
-        bot.sendMessage(id, message).catch((err) => {
-            console.error(`Failed to send to ${id}:`, err.message);
-        });
-    });
+    for (const group of userChunks) {
+        await Promise.allSettled(
+            group.map((id: number) => bot.sendMessage(id, message))
+        );
+        await new Promise((res) => setTimeout(res, 1000));
+    }
 
-    console.log(`Broadcasted to ${users.length} users.`);
+    console.log(`Broadcasted to ${users.length} users safely in chunks.`);
 }
 

@@ -15,5 +15,9 @@
     "node-telegram-bot-api": "^0.66.0",
     "viem": "^2.31.0",
     "winston": "^3.17.0"
+  },
+  "scripts": {
+    "start": "bun index.ts",
+    "dev": "bun run index.ts --watch"
   }
 }

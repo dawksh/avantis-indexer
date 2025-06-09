@@ -7,6 +7,7 @@ import {
 import { base } from "viem/chains";
 
 import { config } from "dotenv";
+import { decodeTransaction } from "./lib/decode";
 config();
 
 const publicClient = createPublicClient({
@@ -20,7 +21,7 @@ const processBlock = async (block: any) => {
     const filters = (block.transactions as unknown as Transaction[]).filter(
         (tx) => tx.to === "0x44914408af82bc9983bbb330e3578e1105e11d4e"
     );
-    console.log(filters)
+    filters.forEach(tx => decodeTransaction(tx))
 };
 
 const unwatch = publicClient.watchBlocks({

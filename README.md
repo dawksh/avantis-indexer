@@ -1,15 +1,3 @@
-# avantis-relayer
+# avantis-indexer
 
-To install dependencies:
-
-```bash
-bun install
-```
-
-To run:
-
-```bash
-bun run index.ts
-```
-
-This project was created using `bun init` in bun v1.2.7. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+An avantis index which indexes avantis' trading contracts and gains alpha from the open and closing of trades

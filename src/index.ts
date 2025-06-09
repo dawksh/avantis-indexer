@@ -25,27 +25,30 @@ const processBlock = async (block: any) => {
     for (const trade of trades) {
         switch (trade.action) {
             case "open":
-                broadcastMessage(
-                    '📢 *New Trade Opened!*\n\n' +
-                    '👤 *Trader*: ' + trade.trader + '\n' +
-                    '📈 *Action*: ' + trade.action.toUpperCase() + ' Position\n' +
-                    '💱 *Token*: ' + trade.token + '\n' +
-                    '🟢 *Direction*: ' + (trade.buy ? 'Long' : 'Short') + '\n' +
-                    '💰 *Entry Price*: ' + trade.price + '\n' +
-                    '⚖️ *Leverage*: ' + trade.leverage + 'x\n' +
-                    '📊 *Margin*: $' + trade.margin + '\n\n' +
-                    '🎯 *Take Profit*: $' + trade.tp + '\n' +
-                    '🛑 *Stop Loss*: $' + trade.sl + '\n\n' +
-                    '🕒 *Time*: ' + trade.timestamp
-                );
+                if (trade.amount! > 100) {
+                    broadcastMessage(
+                        '📢 *New Trade Opened!*\n\n' +
+                        '👤 *Trader*: ' + trade.trader + '\n' +
+                        '💱 *Token*: ' + trade.token + '\n' +
+                        '🟢 *Direction*: ' + (trade.buy ? 'Long' : 'Short') + '\n' +
+                        '💰 *Entry Price*: ' + trade.price + '\n' +
+                        '⚖️ *Leverage*: ' + trade.leverage + 'x\n' +
+                        '📊 *Amount*: $' + trade.margin + '\n\n' +
+                        '🎯 *Take Profit*: $' + trade.tp + '\n' +
+                        '🛑 *Stop Loss*: $' + trade.sl + '\n\n' +
+                        '🕒 *Time*: ' + trade.timestamp
+                    );
+                }
                 break;
             case "close":
                 const msg =
                     '✅ *Position Closed*\n\n' +
                     '👤 *Trader*: ' + trade.trader + '\n' +
-                    '📈 *Action*: ' + trade.action.toUpperCase() + ' Position\n' +
-                    '💱 *Pair*: ' + trade.pair;
-                broadcastMessage(msg);
+                    '💱 *Token*: ' + trade.token + '\n' +
+                    '💸 *Amount*: $' + trade.amount + '\n\n'
+                if (trade.amount! > 100) {
+                    broadcastMessage(msg);
+                }
                 break;
         }
     }

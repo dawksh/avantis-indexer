@@ -40,7 +40,7 @@ export const broadcastMessage = async (message: string) => {
 
     for (const group of userChunks) {
         await Promise.allSettled(
-            group.map((id: number) => bot.sendMessage(id, message))
+            group.map((id: number) => bot.sendMessage(id, message, { parse_mode: 'Markdown' }))
         );
         await new Promise((res) => setTimeout(res, 1000));
     }

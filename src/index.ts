@@ -8,6 +8,8 @@ import { base } from "viem/chains";
 
 import { config } from "dotenv";
 import { decodeTransaction } from "./lib/decode";
+import logger from "./lib/logger";
+
 config();
 
 const publicClient = createPublicClient({
@@ -23,7 +25,7 @@ const processBlock = async (block: any) => {
     );
     const decoded = filters.map(tx => decodeTransaction(tx))
     const trades = decoded.filter(tx => tx !== null)
-    console.log(trades)
+    logger.info(`Parsed ${trades.length} trades`)
 };
 
 const unwatch = publicClient.watchBlocks({

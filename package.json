@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "dotenv": "^16.5.0",
-    "viem": "^2.31.0"
+    "viem": "^2.31.0",
+    "winston": "^3.17.0"
   }
 }

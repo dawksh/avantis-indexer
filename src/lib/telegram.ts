@@ -31,8 +31,7 @@ bot.onText(/\/start/, (msg: Message) => {
     bot.sendMessage(chatId,
         `👋 Hey there!  
 You're all set and registered to receive real-time trade alerts from Avantis.  
-Sit back and let the bot keep you updated on all the big moves with margin over $100! 🚀  
-If you have any questions, just type /help to get started.`
+Sit back and let the bot keep you updated on all the big moves with margin over $100! 🚀  `
     );
 });
 

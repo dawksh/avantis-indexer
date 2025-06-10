@@ -52,3 +52,15 @@ export const broadcastMessage = async (message: string, trader: string, amount: 
     console.log(`Broadcasted to ${users.length} users safely in chunks.`);
 }
 
+export const announcement = async (message: string) => {
+    const users = (await redis.smembers(REDIS_USERS_KEY)).map(Number);
+    if (users.length === 0) return;
+    const userChunks = chunk(users, 25);
+    for (const group of userChunks) {
+        await Promise.allSettled(
+            group.map((id: number) => bot.sendMessage(id, message, { parse_mode: 'Markdown' }))
+        );
+        await new Promise(res => setTimeout(res, 1000));
+    }
+};
+

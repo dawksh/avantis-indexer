@@ -25,7 +25,6 @@ bot.onText(/\/start/, async (msg: Message) => {
 
 bot.onText(/\/subscribe/, async (msg: Message) => {
     const chatId = msg.chat.id;
-    await registerUser(chatId);
     bot.sendMessage(chatId, 'Send the wallet address you want to subscribe to:');
     bot.once('message', async (m: Message) => {
         const address = m.text?.trim();
@@ -33,6 +32,18 @@ bot.onText(/\/subscribe/, async (msg: Message) => {
         const key = `address_subscribers:${address.toLowerCase()}`;
         await redis.sadd(key, chatId.toString());
         bot.sendMessage(chatId, `Subscribed to ${address}`);
+    });
+});
+
+bot.onText(/\/unsubscribe/, async (msg: Message) => {
+    const chatId = msg.chat.id;
+    bot.sendMessage(chatId, 'Send the wallet address you want to unsubscribe from:');
+    bot.once('message', async (m: Message) => {
+        const address = m.text?.trim();
+        if (!address) return bot.sendMessage(chatId, 'Invalid address.');
+        const key = `address_subscribers:${address.toLowerCase()}`;
+        await redis.srem(key, chatId.toString());
+        bot.sendMessage(chatId, `Unsubscribed from ${address}`);
     });
 });
 

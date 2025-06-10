@@ -26,31 +26,52 @@ const processBlock = async (block: any) => {
         switch (trade.action) {
             case "open":
                 logger.info(`Trade Amount: ${trade.amount}`);
-                if (trade.amount! >= 50) {
-                    broadcastMessage(
-                        '📢 *New Trade Opened!*\n\n' +
-                        '👤 *Trader*: ' + trade.trader + '\n' +
-                        '💱 *Token*: ' + trade.token + '\n' +
-                        '🟢 *Direction*: ' + (trade.buy ? 'Long' : 'Short') + '\n' +
-                        '💰 *Entry Price*: ' + trade.price + '\n' +
-                        '⚖️ *Leverage*: ' + trade.leverage + 'x\n' +
-                        '📊 *Amount*: $' + trade.amount + '\n\n' +
-                        '🎯 *Take Profit*: $' + trade.tp + '\n' +
-                        '🛑 *Stop Loss*: $' + trade.sl + '\n\n' +
-                        '🕒 *Time*: ' + trade.timestamp
-                    );
-                }
+                broadcastMessage(
+                    "📢 *New Trade Opened!*\n\n" +
+                    "👤 *Trader*: " +
+                    trade.trader +
+                    "\n" +
+                    "💱 *Token*: " +
+                    trade.token +
+                    "\n" +
+                    "🟢 *Direction*: " +
+                    (trade.buy ? "Long" : "Short") +
+                    "\n" +
+                    "💰 *Entry Price*: " +
+                    trade.price +
+                    "\n" +
+                    "⚖️ *Leverage*: " +
+                    trade.leverage +
+                    "x\n" +
+                    "📊 *Amount*: $" +
+                    trade.amount +
+                    "\n\n" +
+                    "🎯 *Take Profit*: $" +
+                    trade.tp +
+                    "\n" +
+                    "🛑 *Stop Loss*: $" +
+                    trade.sl +
+                    "\n\n" +
+                    "🕒 *Time*: " +
+                    trade.timestamp,
+                    trade.trader!,
+                    trade.amount
+                );
                 break;
             case "close":
                 logger.info(`Trade Amount: ${trade.amount}`);
-                if (trade.amount! > 50) {
-                    const msg =
-                        '✅ *Position Closed*\n\n' +
-                        '👤 *Trader*: ' + trade.trader + '\n' +
-                        '💱 *Token*: ' + trade.token + '\n' +
-                        '💸 *Amount*: $' + trade.amount + '\n\n'
-                    broadcastMessage(msg);
-                }
+                const msg =
+                    "✅ *Position Closed*\n\n" +
+                    "👤 *Trader*: " +
+                    trade.trader +
+                    "\n" +
+                    "💱 *Token*: " +
+                    trade.token +
+                    "\n" +
+                    "💸 *Amount*: $" +
+                    trade.amount +
+                    "\n\n";
+                broadcastMessage(msg, trade.trader!, trade.amount);
                 break;
         }
     }

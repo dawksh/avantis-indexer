@@ -22,6 +22,10 @@
   },
   "scripts": {
     "start": "bun src/index.ts",
-    "dev": "bun run src/index.ts --watch"
+    "dev": "bun --watch run src/index.ts",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:studio": "prisma studio",
+    "prisma:push": "prisma db push"
   }
 }

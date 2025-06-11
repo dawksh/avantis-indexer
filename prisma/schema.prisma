@@ -24,14 +24,16 @@ model User {
   threshold Float    @default(500)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  alerts    Alert[]
 }
 
 model Alert {
-  id        String   @id @default(uuid())
-  chat_id   String
-  amount    Float
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             String   @id @default(uuid())
+  wallet_address String
+  user_chat_id   String
+  user           User     @relation(fields: [user_chat_id], references: [chat_id])
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
 
 model Trade {

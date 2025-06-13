@@ -50,10 +50,7 @@ const processBlock = async (block: any) => {
                     trade.tp +
                     "\n" +
                     "🛑 *Stop Loss*: $" +
-                    trade.sl +
-                    "\n\n" +
-                    "🕒 *Time*: " +
-                    trade.timestamp,
+                    trade.sl,
                     trade.trader!,
                     trade.amount
                 );

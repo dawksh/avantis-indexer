@@ -1,5 +1,6 @@
 import TelegramBot, { type Message } from "node-telegram-bot-api";
 import { redis } from "./redis";
+import logger from "./logger";
 
 const TOKEN = process.env.TELEGRAM_BOT_TOKEN ?? "";
 const REDIS_USERS_KEY = "telegram_users";
@@ -18,11 +19,14 @@ type Users = UserId[];
 
 const loadUsers = async (trader: string, amount: number): Promise<Users> => {
     const allUsers = await redis.smembers(REDIS_USERS_KEY);
-    const getThreshold = async (id: string) => Number(await redis.get(`user_amount_threshold:${id}`)) || 500;
-    const users = await Promise.all(
-        allUsers.map(async (id) => (amount >= await getThreshold(id) ? Number(id) : null))
+    const thresholds = await Promise.all(
+        allUsers.map(async (id) => [id, Number(await redis.get(`user_amount_threshold:${id}`)) || 500] as [string, number])
     );
-    return users.filter(Boolean) as Users;
+    const eligible = thresholds.filter(([_, t]) => typeof t === 'number' && amount >= t).map(([id]) => Number(id));
+    const subKey = `address_subscribers:${trader.toLowerCase()}`;
+    const subs = await redis.smembers(subKey);
+    const subUsers = subs.map(Number);
+    return Array.from(new Set([...eligible, ...subUsers]));
 };
 
 const saveUser = async (id: UserId): Promise<void> => {
@@ -119,7 +123,7 @@ export const broadcastMessage = async (
         );
         await new Promise((res) => setTimeout(res, 1000));
     }
-    console.log(`Broadcasted to ${users.length} users safely in chunks.`);
+    logger.info(`Broadcasted to ${users.length} users safely in chunks.`);
 };
 
 export const announcement = async (message: string) => {

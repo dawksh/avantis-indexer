@@ -6,6 +6,8 @@ import { decodeTransaction } from "./lib/decode";
 import logger from "./lib/logger";
 import "./lib/telegram";
 import { broadcastMessage } from "./lib/telegram";
+import { saveTrade } from "./lib/db";
+import type { Trade } from "@prisma/client";
 
 config();
 
@@ -25,35 +27,20 @@ const processBlock = async (block: any) => {
     for (const trade of trades) {
         switch (trade.action) {
             case "open":
-                logger.info(`Trade Amount: ${trade.amount}`);
-                broadcastMessage(
-                    "📢 *New Trade Opened!*\n\n" +
-                    "👤 *Trader*: " +
-                    trade.trader +
-                    "\n" +
-                    "💱 *Token*: " +
-                    trade.token +
-                    "\n" +
-                    "🟢 *Direction*: " +
-                    (trade.buy ? "Long" : "Short") +
-                    "\n" +
-                    "💰 *Entry Price*: " +
-                    trade.price +
-                    "\n" +
-                    "⚖️ *Leverage*: " +
-                    trade.leverage +
-                    "x\n" +
-                    "📊 *Amount*: $" +
-                    trade.amount +
-                    "\n\n" +
-                    "🎯 *Take Profit*: $" +
-                    trade.tp +
-                    "\n" +
-                    "🛑 *Stop Loss*: $" +
-                    trade.sl,
-                    trade.trader!,
-                    trade.amount
-                );
+                const tradeStore = {
+                    direction: trade.buy ? "long" : "short",
+                    amount: trade.amount,
+                    price: trade.price!,
+                    leverage: trade.leverage!,
+                    tp: trade.tp!,
+                    sl: trade.sl!,
+                    trader: trade.trader!,
+                    token: trade.token!,
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    id: crypto.randomUUID(),
+                }
+                await saveTrade(tradeStore as Trade);
                 break;
             case "close":
                 logger.info(`Trade Amount: ${trade.amount}`);
@@ -68,7 +55,20 @@ const processBlock = async (block: any) => {
                     "💸 *Amount*: $" +
                     trade.amount +
                     "\n\n";
-                broadcastMessage(msg, trade.trader!, trade.amount);
+                // broadcastMessage(msg, trade.trader!, trade.amount);
+                saveTrade({
+                    direction: trade.buy ? "long" : "short",
+                    amount: trade.amount,
+                    price: trade.price!,
+                    leverage: trade.leverage!,
+                    tp: trade.tp!,
+                    sl: trade.sl!,
+                    trader: trade.trader!,
+                    token: trade.token!,
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    id: crypto.randomUUID(),
+                });
                 break;
         }
     }
